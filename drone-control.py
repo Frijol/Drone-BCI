@@ -6,12 +6,14 @@ from dronedirect import DroneDirect
 import socket
 import sys
 
+import json
+
 # Create a UDS socket
 sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
 
 # Connect the socket to the port where the server is listening
 server_address = '/tmp/bci-data.sock'
-print >>sys.stderr, 'connecting to %s' % server_address
+print >>sys.stderr, 'Connecting to %s' % server_address
 try:
     sock.connect(server_address)
 except socket.error, msg:
@@ -21,9 +23,11 @@ except socket.error, msg:
 # Initial setup vars for drone
 SIM = False
 running = True
+data_string = ''
+packet_depth = 0
 
 # Connect to drone
-print "connecting to drone..."
+print 'Connecting to drone...'
 if SIM:
     vehicle = connect('tcp:127.0.0.1:5760', wait_ready=True)
 else:
@@ -38,7 +42,7 @@ if SIM:
     #arm and takeoff drone - DO NOT USE THIS ON A REAL DRONE ONLY IN SIMULATION
     if vehicle.armed == False:
         # Don't let the user try to arm until autopilot is ready
-        print " Waiting for vehicle to initialise..."
+        print 'Waiting for vehicle to initialise...'
         while not vehicle.is_armable:
             time.sleep(1)
         vehicle.armed   = True
@@ -55,8 +59,34 @@ try:
         # Print the data
         print >>sys.stderr, 'received "%s"' % data
 
-        # Move the copter
-        dd.translate(x=1)
+        # Turn data into nice JSON packages
+        for i in data:
+            if i == '{':
+                packet_depth = packet_depth + 1
+            elif i == '}':
+                packet_depth = packet_depth - 1
+
+            data_string += i
+
+            if packet_depth == 0:
+                # Parse JSON
+                packet = json.loads(data_string)
+                # Set up appropriate action
+                x = 0
+                y = 0
+                z = 0
+                if packet.action == 'xval':
+                    x = packet.power
+                elif packet.action == 'yval':
+                    y = packet.power
+                elif packet.action == 'zval':
+                    z = packet.power
+                else:
+                    print 'Unmapped action: "%s"' % packet.action
+                # Move the copter accordingly
+                dd.translate(x=x, y=y, z=z)
+                # Reset for next JSON packet
+                data_string = ''
 
 finally:
     dd.release()
