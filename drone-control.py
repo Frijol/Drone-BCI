@@ -78,7 +78,7 @@ try:
                 z = 0
                 if packet['action'] == 'xval':
                     x = packet['power']
-                elif packet['action'] == 'LIFT':
+                elif packet['action'] == 'lift':
                     y = packet['power']
                 elif packet['action'] == 'zval':
                     z = packet['power']
