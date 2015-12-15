@@ -5,6 +5,11 @@ Much of this project is adapted from DroneDirect: https://github.com/djnugent/dr
 
 Note: works on OSX
 
+## Materials
+
+* [Emotiv EPOC headset](https://store.3drobotics.com/products/solo)
+* [3DR Solo drone](https://store.3drobotics.com/products/solo)
+
 ## Set up and run
 
 ### Server-side
