@@ -71,18 +71,19 @@ try:
             if packet_depth == 0:
                 # Parse JSON
                 packet = json.loads(data_string)
+                print packet
                 # Set up appropriate action
                 x = 0
                 y = 0
                 z = 0
-                if packet.action == 'xval':
-                    x = packet.power
-                elif packet.action == 'yval':
-                    y = packet.power
-                elif packet.action == 'zval':
-                    z = packet.power
+                if packet['action'] == 'xval':
+                    x = packet['power']
+                elif packet['action'] == 'LIFT':
+                    y = packet['power']
+                elif packet['action'] == 'zval':
+                    z = packet['power']
                 else:
-                    print 'Unmapped action: "%s"' % packet.action
+                    print 'Unmapped action: "%s"' % packet['action']
                 # Move the copter accordingly
                 dd.translate(x=x, y=y, z=z)
                 # Reset for next JSON packet
