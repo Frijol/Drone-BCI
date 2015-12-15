@@ -5,7 +5,7 @@ from dronedirect import DroneDirect
 # Libraries for UDS socket
 import socket
 import sys
-
+import math
 import json
 
 # Create a UDS socket
@@ -25,6 +25,7 @@ SIM = False
 running = True
 data_string = ''
 packet_depth = 0
+takeoff = False # it has not yet taken off
 
 # Connect to drone
 print 'Connecting to drone...'
@@ -51,13 +52,8 @@ if SIM:
 
 try:
     while running:
-        # Set up geofence
-        dd.enable_fence(alt_floor=50, alt_ceiling=100 , radius=10)
-
         # Listen for data
         data = sock.recv(16)
-        # Print the data
-        print >>sys.stderr, 'received "%s"' % data
 
         # Turn data into nice JSON packages
         for i in data:
@@ -71,21 +67,29 @@ try:
             if packet_depth == 0:
                 # Parse JSON
                 packet = json.loads(data_string)
-                print packet
                 # Set up appropriate action
                 x = 0
                 y = 0
                 z = 0
                 if packet['action'] == 'xval':
                     x = packet['power']
-                elif packet['action'] == 'lift':
-                    y = packet['power']
-                elif packet['action'] == 'zval':
-                    z = packet['power']
+                elif packet['action'] == 'pull':
+                    # y = math.floor(float(packet['power'] * 10))
+                    y = 3
+                elif packet['action'] == 'push':
+                    # z = packet['power']
+                    z = 3;
+                elif packet['action'] == 'neutral':
+                    data_string = ''
+                    continue
                 else:
                     print 'Unmapped action: "%s"' % packet['action']
                 # Move the copter accordingly
-                dd.translate(x=x, y=y, z=z)
+                if not takeoff:
+                    dd.takeoff(altitude_meters=15)
+                    takeoff = True
+                else:
+                    dd.translate(x=x, y=y, z=z)
                 # Reset for next JSON packet
                 data_string = ''
 
