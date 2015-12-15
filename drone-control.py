@@ -1,12 +1,8 @@
-'''
-template.py
-This program is a template for using DroneDirect.
-
-'''
 from dronekit import *
 from dronedirect import DroneDirect
 
-SIM = True
+SIM = False
+running = True
 
 print "connecting to drone..."
 if SIM:
@@ -31,9 +27,9 @@ if SIM:
     dd.takeoff()
 
 try:
-    '''
-    YOUR CODE HERE
-    '''
+    while running:
+        # dd.enable_fence(self, alt_floor, alt_ceiling ,radius)
+        dd.translate(x=1)
 
 finally:
     dd.release()

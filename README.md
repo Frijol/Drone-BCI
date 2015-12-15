@@ -1,5 +1,6 @@
 # Drone-BCI
 Controlling a drone with brain control
+Most of this project is adapted from DroneDirect: https://github.com/djnugent/dronedirect
 
 ## Run instructions
 
