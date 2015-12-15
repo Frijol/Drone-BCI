@@ -6,7 +6,7 @@ running = True
 
 print "connecting to drone..."
 if SIM:
-    vehicle = connect('127.0.0.1:14551', wait_ready=True)
+    vehicle = connect('tcp:127.0.0.1:5760', wait_ready=True)
 else:
     vehicle = connect('0.0.0.0:14550', wait_ready=True) # connecting from GCS
     #vehicle = connect('udpout:127.0.0.1:14560', wait_ready=True) #connecting from onboard solo
@@ -28,7 +28,7 @@ if SIM:
 
 try:
     while running:
-        # dd.enable_fence(self, alt_floor, alt_ceiling ,radius)
+        dd.enable_fence(alt_floor=50, alt_ceiling=100 , radius=10)
         dd.translate(x=1)
 
 finally:
