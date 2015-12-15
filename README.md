@@ -3,6 +3,21 @@ Controlling a drone with brain control.
 
 Much of this project is adapted from DroneDirect: https://github.com/djnugent/dronedirect
 
+Note: works on OSX
+
+## Set up and run
+
+### Server-side
+1. Put on your Emotiv headset and ensure it's connected
+1. Open the project in XCode (`open OSX_Project/MentalCommand/MentalCommand.xcodeproj`) and hit CMD + R to build and run
+
+### Client-side
+1. Git clone this directory, then navigate to it in your terminal
+1. Run `sudo pip install -r requirements.txt` to install dependencies
+1. Run `python setup.py install` to install local dependencies
+1. Turn on Solo and controller, and connect your computer to its Wifi
+1. Run `python drone-control.py`
+
 ## Dev setup instructions
 
 ### Setting up your Solo development environment
