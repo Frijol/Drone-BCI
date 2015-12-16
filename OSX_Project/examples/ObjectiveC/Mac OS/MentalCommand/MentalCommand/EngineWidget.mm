@@ -187,12 +187,66 @@ CommSocketServer *server;
     // TODO: Not swallow this error
     NSError *error;
     NSDictionary *actionData = [NSDictionary dictionaryWithObjectsAndKeys:
-                          @(action).stringValue, @"action", @(power).stringValue, @"power", nil];
+                                [self actionStringForEnumVal:action], @"action", @(power).stringValue, @"power", nil];
     
     NSData* jsonData = [NSJSONSerialization dataWithJSONObject:actionData
                                                        options:NSJSONWritingPrettyPrinted error:&error];
     
     [server messageClientsData:jsonData];
+}
+
+-(NSString *) actionStringForEnumVal: (IEE_MentalCommandAction_t) action
+{
+    NSString *result = nil;
+    switch (action)
+    {
+        case MC_NEUTRAL:
+            result = @"neutral";
+            break;
+        case MC_PUSH:
+            result = @"push";
+            break;
+        case MC_PULL:
+            result = @"pull";
+            break;
+        case MC_LIFT:
+            result = @"lift";
+            break;
+        case MC_DROP:
+            result = @"drop";
+            break;
+        case MC_LEFT:
+            result = @"left";
+            break;
+        case MC_RIGHT:
+            result = @"right";
+            break;
+        case MC_ROTATE_LEFT:
+            result = @"rorate_left";
+            break;
+        case MC_ROTATE_RIGHT:
+            result = @"rotate_right";
+            break;
+        case MC_ROTATE_COUNTER_CLOCKWISE:
+            result = @"rotate_counter_clockwise";
+            break;
+        case MC_ROTATE_CLOCKWISE:
+            result = @"rotate_clockwise";
+            break;
+        case MC_ROTATE_FORWARDS:
+            result = @"rotate_forwards";
+            break;
+        case MC_ROTATE_REVERSE:
+            result = @"rotate_reverse";
+            break;
+        case MC_DISAPPEAR:
+            result = @"rotate_disappear";
+            break;
+        default:
+            [NSException raise:NSGenericException format:@"Unexpected Action Type."];
+    }
+    
+    return result;
 }
 
 @end
