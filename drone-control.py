@@ -79,10 +79,8 @@ try:
                     y = 3 # forward
                 elif packet['action'] == 'push':
                     z = 3 # upward
-                elif packet['action'] == 'rotate_right':
-                    degrees = 30
-                elif packet ['action'] == 'rotate_left':
-                    degrees = -30
+                elif packet['action'] == 'yaw':
+                    degrees = packet['power'] # rotate yaw neg/pos based on X vector of head motion
                 elif packet['action'] == 'neutral':
                     data_string = ''
                     continue
