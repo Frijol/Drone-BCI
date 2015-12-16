@@ -185,10 +185,15 @@ CommSocketServer *server;
 
 -(void) broadcastAction : (IEE_MentalCommandAction_t) action withPower:(NSNumber *)power
 {
+    [self broadcastActionString:[self actionStringForEnumVal:action] withPower:power];
+}
+
+-(void) broadcastActionString : (NSString *) action withPower:(NSNumber *)power
+{
     // TODO: Not swallow this error
     NSError *error;
     NSDictionary *actionData = [NSDictionary dictionaryWithObjectsAndKeys:
-                                [self actionStringForEnumVal:action], @"action", [power stringValue], @"power", nil];
+                                action, @"action", [power stringValue], @"power", nil];
     
     NSData* jsonData = [NSJSONSerialization dataWithJSONObject:actionData
                                                        options:NSJSONWritingPrettyPrinted error:&error];
@@ -257,8 +262,8 @@ CommSocketServer *server;
     int YOut;
     IEE_HeadsetGetGyroDelta(0, &XOut, &YOut);
 
-    [self broadcastAction:MC_ROTATE_RIGHT withPower:[[NSNumber alloc] initWithInt:XOut]];
-    [self broadcastAction:MC_ROTATE_LEFT withPower:[[NSNumber alloc] initWithInt:YOut]];
+    [self broadcastActionString:@"yaw" withPower:[[NSNumber alloc] initWithInt:XOut]];
+//    [self broadcastAction:MC_ROTATE_LEFT withPower:[[NSNumber alloc] initWithInt:YOut]];
 }
 
 @end

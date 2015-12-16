@@ -53,7 +53,9 @@ if SIM:
 try:
     while running:
         # Listen for data
+        print "Waiting for data..."
         data = sock.recv(16)
+        print "Received!"
 
         # Turn data into nice JSON packages
         for i in data:
@@ -74,13 +76,14 @@ try:
 
                 # Mapping of thoughts/actions to copter motions
                 if packet['action'] == 'xval':
-                    # x = packet['power'] # sideways (to the right?)
+                    x = packet['power'] # sideways (to the right?)
                 elif packet['action'] == 'pull':
                     y = 3 # forward
                 elif packet['action'] == 'push':
                     z = 3 # upward
                 elif packet['action'] == 'yaw':
-                    degrees = packet['power'] # rotate yaw neg/pos based on X vector of head motion
+                    degrees = int(packet['power']) # rotate yaw neg/pos based on X vector of head motion
+                    print "Rotating at a rate of " + str(degrees)
                 elif packet['action'] == 'neutral':
                     data_string = ''
                     continue
@@ -92,9 +95,11 @@ try:
                     takeoff = True
                 else:
                     # Move according to any thoughts
-                    dd.translate(x=x, y=y, z=z)
+                    if (x != 0 or y != 0 or z != 0):
+                        dd.translate(x=x, y=y, z=z)
                     # Rotate according to head motions
-                    dd.point(degrees=degrees)
+                    if (degrees):
+                        dd.point(degrees=degrees)
                 # Reset for next JSON packet
                 data_string = ''
 
