@@ -71,14 +71,18 @@ try:
                 x = 0
                 y = 0
                 z = 0
+
+                # Mapping of thoughts/actions to copter motions
                 if packet['action'] == 'xval':
-                    x = packet['power']
+                    # x = packet['power'] # sideways (to the right?)
                 elif packet['action'] == 'pull':
-                    # y = math.floor(float(packet['power'] * 10))
-                    y = 3
+                    y = 3 # forward
                 elif packet['action'] == 'push':
-                    # z = packet['power']
-                    z = 3;
+                    z = 3 # upward
+                elif packet['action'] == 'rotate_right':
+                    degrees = 30
+                elif packet ['action'] == 'rotate_left':
+                    degrees = -30
                 elif packet['action'] == 'neutral':
                     data_string = ''
                     continue
@@ -89,7 +93,10 @@ try:
                     dd.takeoff(altitude_meters=15)
                     takeoff = True
                 else:
+                    # Move according to any thoughts
                     dd.translate(x=x, y=y, z=z)
+                    # Rotate according to head motions
+                    dd.point(degrees=degrees)
                 # Reset for next JSON packet
                 data_string = ''
 

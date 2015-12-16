@@ -1,7 +1,7 @@
 # Drone-BCI
-Controlling a drone with brain control.
+Controlling a drone with brain control. Aka awakening the force, or telekinesis.
 
-Much of this project is adapted from DroneDirect: https://github.com/djnugent/dronedirect
+[first test flight](https://youtu.be/blZMIsAUTwo)
 
 Note: works on OSX
 
@@ -64,6 +64,7 @@ We used this [Emotiv Objective-C Example](https://github.com/Emotiv/community-sd
 
 [This tutorial for the Python side](https://pymotw.com/2/socket/uds.html) makes this pretty easy. Test server/client to make sure it works, then integrate the client side into the main Python code.
 
+We then sent actions over the server-side UDS from the Mac app (Emotiv-side) packaged as JSON, and parsed the incoming JSON into actions on the client (drone) side.
 
 ## Useful links
 
@@ -72,3 +73,6 @@ We used this [Emotiv Objective-C Example](https://github.com/Emotiv/community-sd
 * [About Unix Domain Sockets (UDS)](https://pymotw.com/2/socket/uds.html)
 * [Emotiv Community SDK](https://github.com/Emotiv/community-sdk)
 * [Emotiv Objective-C Example](https://github.com/Emotiv/community-sdk/blob/master/examples/ObjectiveC/Mac%20OS/MentalCommand/MentalCommand/EngineWidget.mm)
+
+## Credit where credit is due
+Much of the drone control piece of this project is adapted from DroneDirect: https://github.com/djnugent/dronedirect
