@@ -1,6 +1,7 @@
 # Drone-BCI
 Controlling a drone with brain control. Aka awakening the force, or telekinesis.
 
+![](https://cloud.githubusercontent.com/assets/454690/11829632/c33ade64-a352-11e5-8255-7d1f55cadbe5.png)
 [first test flight](https://youtu.be/blZMIsAUTwo)
 
 Note: works on OSX
