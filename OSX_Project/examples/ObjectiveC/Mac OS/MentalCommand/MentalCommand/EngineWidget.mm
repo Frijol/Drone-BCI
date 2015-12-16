@@ -73,7 +73,8 @@ CommSocketServer *server;
             IEE_EmoEngineEventGetEmoState(eEvent, eState);
             IEE_MentalCommandAction_t action = IS_MentalCommandGetCurrentAction(eState);
             float power = IS_MentalCommandGetCurrentActionPower(eState);
-            [self broadcastAction:action withPower:power];
+            [self broadcastAction:action withPower:[[NSNumber alloc] initWithFloat:power]];
+            [self broadcastRotation];
             if(self.delegate)
                 [self.delegate emoStateUpdate:action power:power];
         }
@@ -182,18 +183,19 @@ CommSocketServer *server;
     return isConnected;
 }
 
--(void) broadcastAction : (IEE_MentalCommandAction_t) action withPower:(float) power
+-(void) broadcastAction : (IEE_MentalCommandAction_t) action withPower:(NSNumber *)power
 {
     // TODO: Not swallow this error
     NSError *error;
     NSDictionary *actionData = [NSDictionary dictionaryWithObjectsAndKeys:
-                                [self actionStringForEnumVal:action], @"action", @(power).stringValue, @"power", nil];
+                                [self actionStringForEnumVal:action], @"action", [power stringValue], @"power", nil];
     
     NSData* jsonData = [NSJSONSerialization dataWithJSONObject:actionData
                                                        options:NSJSONWritingPrettyPrinted error:&error];
     
     [server messageClientsData:jsonData];
 }
+
 
 -(NSString *) actionStringForEnumVal: (IEE_MentalCommandAction_t) action
 {
@@ -222,7 +224,7 @@ CommSocketServer *server;
             result = @"right";
             break;
         case MC_ROTATE_LEFT:
-            result = @"rorate_left";
+            result = @"rotate_left";
             break;
         case MC_ROTATE_RIGHT:
             result = @"rotate_right";
@@ -247,6 +249,16 @@ CommSocketServer *server;
     }
     
     return result;
+}
+
+-(void) broadcastRotation
+{
+    int XOut;
+    int YOut;
+    IEE_HeadsetGetGyroDelta(0, &XOut, &YOut);
+
+    [self broadcastAction:MC_ROTATE_RIGHT withPower:[[NSNumber alloc] initWithInt:XOut]];
+    [self broadcastAction:MC_ROTATE_LEFT withPower:[[NSNumber alloc] initWithInt:YOut]];
 }
 
 @end

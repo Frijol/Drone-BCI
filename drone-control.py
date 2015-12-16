@@ -21,7 +21,7 @@ except socket.error, msg:
     sys.exit(1)
 
 # Initial setup vars for drone
-SIM = False
+SIM = True
 running = True
 data_string = ''
 packet_depth = 0
