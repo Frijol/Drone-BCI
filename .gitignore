@@ -57,4 +57,4 @@ docs/_build/
 target/
 
 #Xcode User Data
-UserInterfaceState.xcuserstate
+OSX_Project/examples/ObjectiveC/Mac OS/MentalCommand/MentalCommand.xcodeproj/project.xcworkspace/xcuserdata/Jon.xcuserdatad/UserInterfaceState.xcuserstate
