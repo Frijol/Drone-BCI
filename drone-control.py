@@ -21,7 +21,7 @@ except socket.error, msg:
     sys.exit(1)
 
 # Initial setup vars for drone
-SIM = True
+SIM = False
 running = True
 data_string = ''
 packet_depth = 0
@@ -73,6 +73,8 @@ try:
                 x = 0
                 y = 0
                 z = 0
+                degrees = 0
+                gimbalPitch = 0
 
                 # Mapping of thoughts/actions to copter motions
                 if packet['action'] == 'xval':
@@ -82,8 +84,10 @@ try:
                 elif packet['action'] == 'push':
                     z = 3 # upward
                 elif packet['action'] == 'yaw':
-                    degrees = int(packet['power']) # rotate yaw neg/pos based on X vector of head motion
+                    degrees = int(packet['power'])/10 # rotate yaw neg/pos based on X vector of head motion
                     print "Rotating at a rate of " + str(degrees)
+                elif packet['action'] == 'gimbal-pitch':
+                    gimbalPitch = int(packet['power'])/10 # rotate yaw neg/pos based on X vector of head motion
                 elif packet['action'] == 'neutral':
                     data_string = ''
                     continue

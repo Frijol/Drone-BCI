@@ -74,7 +74,7 @@ CommSocketServer *server;
             IEE_MentalCommandAction_t action = IS_MentalCommandGetCurrentAction(eState);
             float power = IS_MentalCommandGetCurrentActionPower(eState);
             [self broadcastAction:action withPower:[[NSNumber alloc] initWithFloat:power]];
-            [self broadcastRotation];
+//            [self broadcastRotation];
             if(self.delegate)
                 [self.delegate emoStateUpdate:action power:power];
         }
@@ -263,7 +263,7 @@ CommSocketServer *server;
     IEE_HeadsetGetGyroDelta(0, &XOut, &YOut);
 
     [self broadcastActionString:@"yaw" withPower:[[NSNumber alloc] initWithInt:XOut]];
-//    [self broadcastAction:MC_ROTATE_LEFT withPower:[[NSNumber alloc] initWithInt:YOut]];
+    [self  broadcastActionString:@"gimbal-lift" withPower:[[NSNumber alloc] initWithInt:YOut]];
 }
 
 @end
